@@ -5,10 +5,10 @@ import Loader from '../components/Loader';
 import fetchPlaylists from '../services/api';
 
 const moods = [
-  { id:'happy', label:'Happy', desc:'Bright & upbeat', image:'/src/assets/moods/happy.png' },
-  { id:'sad', label:'Sad', desc:'Melancholic', image:'/src/assets/moods/sad.png' },
-  { id:'energetic', label:'Energetic', desc:'High-energy', image:'/src/assets/moods/energetic.png' },
-  { id:'calm', label:'Calm', desc:'Soft & chill', image:'/src/assets/moods/calm.png' }
+  { id:'happy', label:'Happy', desc:'Bright & upbeat', image:'/src/assets/moods/happy' },
+  { id:'sad', label:'Sad', desc:'Melancholic', image:'/src/assets/moods/sad' },
+  { id:'energetic', label:'Energetic', desc:'High-energy', image:'/src/assets/moods/energetic' },
+  { id:'calm', label:'Calm', desc:'Soft & chill', image:'/src/assets/moods/calm' }
 ];
 
 export default function Home(){
