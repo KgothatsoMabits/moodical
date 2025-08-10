@@ -1,0 +1,22 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* base resets and small customizations */
+@layer base {
+  html,body,#root { height: 100%; }
+  body {
+    @apply font-sans bg-white text-slate-900;
+    transition: background .45s ease, color .45s ease;
+  }
+}
+
+/* small component classes we reuse */
+@layer components {
+  .card {
+    @apply bg-white/80 rounded-2xl shadow-md p-4;
+  }
+  .glass {
+    @apply bg-white/10 backdrop-blur-md border border-white/10 rounded-xl;
+  }
+}

@@ -1,0 +1,23 @@
+body.neutral {
+  background: linear-gradient(180deg,#f8fafc,#ffffff);
+}
+
+body.happy {
+  background: radial-gradient(circle at 10% 10%, #fffbe6, #fff3cd 40%, #fef3c7 100%);
+  color: #7c2d12;
+}
+
+body.sad {
+  background: linear-gradient(180deg,#eef2ff,#e0e7ff);
+  color: #1e3a8a;
+}
+
+body.energetic {
+  background: linear-gradient(180deg,#fff7ed,#ffd6cc);
+  color: #7f1d1d;
+}
+
+body.calm {
+  background: linear-gradient(180deg,#f0fdfa,#d1fae5);
+  color: #14532d;
+}
