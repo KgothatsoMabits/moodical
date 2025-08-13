@@ -42,5 +42,21 @@ export const mockPlaylists = {
       owner: { display_name: 'MOODICAL' },
       external_urls: { spotify: 'https://open.spotify.com' }
     }
+  ],
+  motivational: [
+    {
+      id: 'm-motive-1',
+      name: 'Rise & Grind',
+      images: [{ url: 'https://images.unsplash.com/photo-1485217988980-11786ced9454?w=640&q=80' }],
+      owner: { display_name: 'MOODICAL' },
+      external_urls: { spotify: 'https://open.spotify.com' }
+    },
+    {
+      id: 'm-motive-2',
+      name: 'Focus & Conquer',
+      images: [{ url: 'https://images.unsplash.com/photo-1475724017904-b712052c192a?w=640&q=80' }],
+      owner: { display_name: 'MOODICAL' },
+      external_urls: { spotify: 'https://open.spotify.com' }
+    }
   ]
 };

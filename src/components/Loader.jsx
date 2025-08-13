@@ -1,9 +1,12 @@
 import React from 'react';
+import '../styles/global.css';
 
-export default function Loader({ small }) {
+export default function Loader({ small = false }) {
+  const sizeClass = small ? 'loader-small' : 'loader-large';
+
   return (
-    <div className="flex justify-center items-center py-6">
-      <div className={`w-${small ? '6' : '12'} h-${small ? '6' : '12'} rounded-full border-4 border-slate-200 border-t-brand animate-spin`} />
+    <div className="loader-container">
+      <div className={`loader-spinner ${sizeClass}`} />
     </div>
   );
 }

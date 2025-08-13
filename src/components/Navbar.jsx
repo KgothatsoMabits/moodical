@@ -1,15 +1,31 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
+import '../styles/global.css';
 
 export default function Navbar() {
   const loc = useLocation();
-  return (
-    <nav className="container mx-auto flex items-center gap-4 p-4 rounded-xl glass">
-      <div className="font-semibold text-lg text-brand-dark">MOODICAL</div>
 
-      <div className="ml-auto flex gap-4">
-        <Link to="/" className={`px-3 py-1 rounded-md ${loc.pathname === '/' ? 'bg-brand text-white' : 'text-slate-700'}`}>Home</Link>
-        <Link to="/about" className={`px-3 py-1 rounded-md ${loc.pathname === '/about' ? 'bg-brand text-white' : 'text-slate-700'}`}>About</Link>
+  return (
+    <nav className="navbar">
+      <div className="navbar-brand">MOODICAL</div>
+      <div className="nav-links">
+        <Link
+          to="/"
+          className={`nav-link ${loc.pathname === '/' ? 'active' : ''}`}
+          aria-current={loc.pathname === '/' ? 'page' : undefined}
+          tabIndex={loc.pathname === '/' ? -1 : 0}
+        >
+          Home
+        </Link>
+
+        <Link
+          to="/about"
+          className={`nav-link ${loc.pathname === '/about' ? 'active' : ''}`}
+          aria-current={loc.pathname === '/about' ? 'page' : undefined}
+          tabIndex={loc.pathname === '/about' ? -1 : 0}
+        >
+          About
+        </Link>
       </div>
     </nav>
   );
