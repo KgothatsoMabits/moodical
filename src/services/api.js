@@ -1,39 +1,58 @@
-import axios from 'axios';
-import { mockPlaylists } from './mockData';
+// src/services/api.js
+const SPOTIFY_BASE_URL = "https://api.spotify.com/v1";
+const token = import.meta.env.VITE_SPOTIFY_ACCESS_TOKEN; 
+// Make sure you have this set in your .env file
 
 /**
- * fetchPlaylists(mood)
- * - if VITE_SPOTIFY_TOKEN is provided, call Spotify Search API
- * - otherwise return mock data (fast fallback for demo)
+ * Fetch playlists from a Spotify category
+ * @param {string} categoryId - The Spotify category ID (e.g., "mood", "party")
+ * @returns {Promise<Array>} - Array of playlist objects
  */
-const SPOTIFY_TOKEN = import.meta.env.VITE_SPOTIFY_TOKEN || '';
-
-export default async function fetchPlaylists(mood) {
-  // small map from mood -> query
-  const q = {
-    happy: 'happy upbeat playlist',
-    sad: 'sad slow playlist',
-    energetic: 'workout energetic playlist',
-    calm: 'calm chill playlist'
-  }[mood] || mood;
-
-  if (!SPOTIFY_TOKEN) {
-    // return mock copy (simulate network latency)
-    await new Promise(r => setTimeout(r, 400));
-    return mockPlaylists[mood] || [];
-  }
-
+export async function fetchPlaylistsByCategory(categoryId) {
   try {
-    const resp = await axios.get('https://api.spotify.com/v1/search', {
-      params: { q, type: 'playlist', limit: 12 },
-      headers: { Authorization: `Bearer ${SPOTIFY_TOKEN}` }
+    const response = await fetch(
+      `${SPOTIFY_BASE_URL}/browse/categories/${categoryId}/playlists?limit=10`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    if (!response.ok) {
+      console.error("Error fetching playlists:", response.status, response.statusText);
+      return [];
+    }
+
+    const data = await response.json();
+    return data.playlists.items || [];
+  } catch (err) {
+    console.error("Error in fetchPlaylistsByCategory:", err);
+    return [];
+  }
+}
+
+/**
+ * Optionally fetch available Spotify categories
+ * @returns {Promise<Array>} - Array of category objects
+ */
+export async function fetchCategories() {
+  try {
+    const response = await fetch(`${SPOTIFY_BASE_URL}/browse/categories?limit=20`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
     });
 
-    // return playlists array
-    return resp.data.playlists?.items || [];
+    if (!response.ok) {
+      console.error("Error fetching categories:", response.status, response.statusText);
+      return [];
+    }
+
+    const data = await response.json();
+    return data.categories.items || [];
   } catch (err) {
-    console.error('Spotify fetch error:', err?.response?.data || err.message);
-    // fallback to mock if Spotify fails
-    return mockPlaylists[mood] || [];
+    console.error("Error in fetchCategories:", err);
+    return [];
   }
 }

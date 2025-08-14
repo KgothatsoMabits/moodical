@@ -3,24 +3,26 @@ import PlaylistCard from "../components/PlaylistCard";
 import Loader from "../components/Loader";
 import MoodCard from "../components/MoodCard";
 import { motion } from "framer-motion";
-import fetchPlaylists from "../services/api";
-import moods from "../data/moods";
-import '../styles/global.css';
+import { fetchPlaylistsByCategory } from "../services/api"; // ✅ updated import
+import moods from "../data/moods"; // This should now contain real Spotify categories
+import "../styles/global.css";
 
 export default function Home() {
-  const [selected, setSelected] = useState(null);
+  const [selected, setSelected] = useState(null); // will store mood object
   const [playlists, setPlaylists] = useState([]);
   const [loading, setLoading] = useState(false);
 
-  const handleSelect = async (id) => {
-    setSelected(id);
-    document.body.className = id;
+  const handleSelect = async (moodId) => {
+    setSelected(moodId);
+    document.body.className = moodId; // optional: can style based on mood
+
     setLoading(true);
     try {
-      const res = await fetchPlaylists(id);
-      setPlaylists(res || []);
+      // ✅ Fetch playlists using the updated API function
+      const results = await fetchPlaylistsByCategory(moodId);
+      setPlaylists(results || []);
     } catch (err) {
-      console.error("fetch playlists failed", err);
+      console.error("❌ Failed to fetch playlists:", err);
       setPlaylists([]);
     } finally {
       setLoading(false);
@@ -29,6 +31,7 @@ export default function Home() {
 
   return (
     <div className="min-h-screen">
+      {/* Mood selection */}
       <section className="bg-white shadow-sm py-8 rounded-lg max-w-5xl mx-auto px-6 my-8">
         <h1 className="text-3xl font-bold text-gray-800 mb-4 text-center">
           Select Your Mood
@@ -42,20 +45,21 @@ export default function Home() {
             <MoodCard
               key={mood.id}
               mood={mood}
-              onSelect={handleSelect}
+              onSelect={() => handleSelect(mood.id)} // pass Spotify category ID
               selected={selected}
             />
           ))}
         </div>
       </section>
 
+      {/* Playlist results */}
       <main className="max-w-5xl mx-auto px-6 pb-16">
         {loading && <Loader />}
 
         {!loading && selected && (
           <>
             <h2 className="text-xl font-semibold mb-6 text-center">
-              Playlists for {selected}
+              Playlists for {moods.find((m) => m.id === selected)?.label || selected}
             </h2>
 
             {playlists.length === 0 ? (
