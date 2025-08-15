@@ -1,4 +1,3 @@
-// src/components/MoodList.js
 import React, { useState } from 'react';
 import moods from '../data/moods';
 import { getPlaylistsByMood } from '../api/spotify';

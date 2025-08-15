@@ -1,21 +1,30 @@
-import React from 'react';
+import React, { memo } from 'react';
 import { motion } from 'framer-motion';
-import moods from '../data/moods';
-import '../styles/global.css';
+import PropTypes from 'prop-types';
 
-export default function MoodCard({ mood, onSelect, selected }) {
+const MoodCard = ({ mood, onSelect, selected = false, isAvailable = false }) => {
+  const cardClassName = `mood-card ${selected ? 'selected' : ''} ${!isAvailable ? 'unavailable' : ''}`;
   return (
     <motion.button
-      onClick={() => onSelect(mood)} // Pass the whole mood object
-      whileHover={{ scale: 1.05 }}
-      whileTap={{ scale: 0.95 }}
-      className={`mood-card ${selected === mood.id ? 'selected' : ''}`}
-      aria-pressed={selected === mood.id}
-      aria-label={`Select mood ${mood.label}`}
+      onClick={() => onSelect(mood)}
+      className={cardClassName}
+      disabled={!isAvailable}
+      whileHover={{ scale: isAvailable ? 1.05 : 1.0 }}
+      whileTap={{ scale: isAvailable ? 0.95 : 1.0 }}
     >
       <img src={mood.image} alt={mood.label} className="mood-image" />
-      <div className="font-semibold">{mood.label}</div>
-      <div className="text-sm">{mood.desc}</div>
+      <h3 className="mood-title">{mood.label}</h3>
+      <p className="mood-desc">{mood.desc}</p>
+      {!isAvailable && <div className="unavailable-overlay">Not Available</div>}
     </motion.button>
   );
-}
+};
+
+MoodCard.propTypes = {
+  mood: PropTypes.object.isRequired,
+  onSelect: PropTypes.func.isRequired,
+  selected: PropTypes.bool,
+  isAvailable: PropTypes.bool,
+};
+
+export default memo(MoodCard); 

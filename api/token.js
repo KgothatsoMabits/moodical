@@ -1,9 +1,13 @@
 const express = require('express');
-const router = express.Router();
 const axios = require('axios');
+const cors = require('cors');
 require('dotenv').config();
 
-router.get('/token', async (req, res) => {
+const app = express();
+
+app.use(cors());
+
+app.get('/api/token', async (req, res) => {
   try {
     const response = await axios.post(
       'https://accounts.spotify.com/api/token',
@@ -17,12 +21,11 @@ router.get('/token', async (req, res) => {
         }
       }
     );
-    
-    res.json(response.data);
+    res.status(200).json(response.data);
   } catch (error) {
     console.error('Spotify Token Error:', error.response?.data || error.message);
     res.status(500).json({ error: 'Failed to fetch Spotify token' });
   }
 });
 
-module.exports = router;
+module.exports = app;

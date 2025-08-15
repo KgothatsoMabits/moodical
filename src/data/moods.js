@@ -1,39 +1,32 @@
-const moods = [
+export const moods = [
   {
-    id: "happy",
-    label: "Happy",
+    id: 'happy',
+    label: 'Party', 
     desc: 'Upbeat and joyful tunes.',
-    image: "/src/assets/moods/happy.jpg",
-    category_id: "party"
+    image: '/src/assets/moods/happy.jpg',
   },
   {
-    id: "sad",
-    label: "Sad",
+    id: 'sad',
+    label: 'Blues', 
     desc: 'Melancholic and reflective music.',
-    image: "/src/assets/moods/sad.jpg",
-    categoryId: "mood"
+    image: '/src/assets/moods/sad.jpg',
   },
   {
-    id: "energetic",
-    label: "Workout",
-    desc: 'High-energy tracks to get you moving.',
-    image: "/src/assets/moods/energetic.jpg",
-    categoryId: "workout"
-  },
-  {
-    id: "chill",
-    label: "Chill",
+    id: 'chill',
+    label: 'Chill',
     desc: 'Relax and unwind.',
-    image: "/src/assets/moods/calm.jpg",
-    categoryId: "chill"
+    image: '/src/assets/moods/calm.jpg',
   },
   {
-    id: "focus",
-    label: "Focus",
+    id: 'focus',
+    label: 'Focus',
     desc: 'Music to help you concentrate.',
-    image: "/src/assets/moods/motivational.jpg",
-    categoryId: "focus"
+    image: '/src/assets/moods/motivational.jpg',
+  },
+  {
+    id: 'workout',
+    label: 'Workout',
+    desc: 'Energy for your workout.',
+    image: '/src/assets/moods/energetic.jpg',
   },
 ];
-
-export default moods;

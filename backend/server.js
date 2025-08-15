@@ -6,7 +6,6 @@ const spotifyRoutes = require('./routes/spotify');
 const app = express();
 const port = 5000;
 
-// Load environment variables from .env file
 dotenv.config();
 
 const spotify_client_id = process.env.VITE_SPOTIFY_CLIENT_ID;

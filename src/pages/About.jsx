@@ -1,5 +1,8 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom"; 
 import "../styles/global.css";
+import { Helmet } from 'react-helmet-async';
+
 
 export default function About() {
   const [formData, setFormData] = useState({
@@ -8,6 +11,8 @@ export default function About() {
     surname: "",
     email: ""
   });
+  const [showPopup, setShowPopup] = useState(false); 
+  const navigate = useNavigate(); 
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -17,11 +22,23 @@ export default function About() {
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log("Form submitted:", formData);
-    alert("Thanks for your feedback! 🙌");
+    setShowPopup(true); 
+
+    setTimeout(() => {
+      navigate("/");
+    }, 3000);
   };
 
   return (
     <div className="container">
+      {showPopup && (
+        <div className="popup-overlay">
+          <div className="popup-container">
+            <p>Thanks for your feedback, {formData.name}! 🙌</p>
+          </div>
+        </div>
+      )}
+
       <h1>About This App</h1>
       <p>This app lets you explore features based on your mood.</p>
 

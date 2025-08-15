@@ -6,8 +6,16 @@ export default function Footer() {
     <footer className="footer">
       <div className="footer-content container">
         <span>
-          A winning <span className="footer-accent">FNB App Academy</span> Web App by{" "}
-          <strong>Kgothatso M.</strong>
+          A winning{" "}
+          <a
+            href="https://academy.appoftheyear.co.za/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="footer-accent"
+          >
+            FNB App Academy
+          </a>{" "}
+          Web App by <strong>Kgothatso M.</strong>
         </span>
         <div className="footer-icon" role="img" aria-label="sparkles">
           ✨

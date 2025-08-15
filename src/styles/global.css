@@ -103,7 +103,6 @@ main {
 .page-wrapper {
   min-height: 100vh;
   position: relative;
-  background: none;
   transition: background 0.3s ease;
 }
 
@@ -125,8 +124,7 @@ main {
   max-width: 800px;
   margin: 2rem auto;
   color: white;
-  /* padding-left: 1rem;
-  padding-right: 1rem; */
+  flex: 1 0 auto;
 }
 
 .page-wrapper.bg-image::before {
@@ -145,8 +143,6 @@ nav {
   z-index: 2;
 }
 
-
-
 /* grid helpers */
 .grid {
   display: grid;
@@ -159,6 +155,44 @@ nav {
   grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
 }
 
+.popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.75);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  backdrop-filter: blur(5px);
+}
+
+.popup-container {
+  background: var(--background-alt);
+  padding: 2rem 3rem;
+  border-radius: 0.75rem;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+  text-align: center;
+  color: var(--text-main);
+  font-size: 1.25rem;
+  font-weight: 500;
+  border: 1px solid var(--border);
+  animation: fadeIn 0.3s ease-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
 /* MoodCard base */
 .mood-card {
   background: rgba(255 255 255 / 0.15);
@@ -169,8 +203,8 @@ nav {
   width: 150px;
   cursor: pointer;
   user-select: none;
-  margin-right: 7.5px;
-  margin-top: 10.5px;
+  margin-right: 5.5px;
+  margin-top: 7.5px;
   margin-bottom: 10.5px;
   display: flex;
   flex-direction: column;
@@ -181,7 +215,7 @@ nav {
     transform 0.25s ease,
     box-shadow 0.25s ease,
     background-color 0.3s ease;
-  color: var(--text);
+  color: var(--card);
 }
 
 
@@ -219,7 +253,7 @@ nav {
 
 /* Mood label */
 .mood-card > .font-semibold {
-  font-size: 1.125rem;  
+  font-size: 2.155rem;  
   font-weight: 700;
   color: var(--brand);
   user-select: none;
@@ -335,21 +369,11 @@ nav {
   background: var(--accent);
 }
 
-/* Playlist title */
-.playlist-card__title {
-  font-size: 1.1rem;
-  font-weight: 700;
-  color: var(--brand-dark);
-  user-select: text;
-  line-height: 1.2;
-  margin-bottom: 0.125rem;
-}
-
 /* Playlist owner */
 .playlist-card__owner {
   font-weight: 500;
   font-size: 0.875rem;
-  color: var(--muted);
+  color: var(--card);
   user-select: text;
 }
 
@@ -358,7 +382,7 @@ nav {
   margin-top: 0.5rem;
   font-weight: 600;
   font-size: 0.9rem;
-  color: var(--brand);
+  color: var(--card);
   text-decoration: none;
   align-self: flex-start;
   transition: color 0.3s ease;
@@ -381,13 +405,65 @@ nav {
   }
 }
 
+/* Playlist Grid Styles */
+.playlists-container {
+  margin-top: 4rem;
+}
+
+
+.playlist-image {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+  border-radius: 0.5rem;
+}
+
+.playlist-info {
+  padding-top: 0.75rem;
+}
+
+.playlist-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--brand-dark);
+  user-select: text;
+  line-height: 1.2;
+  margin-bottom: 0.125rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.playlist-desc {
+  font-size: 0.875rem;
+  color: var(--card);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-decoration: none;
+}
+
 
 /* Loader container centers the spinner */
 .loader-container {
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 1.5rem 0;
+  padding: 4rem 1rem;
+  width: 100%;
+}
+
+.loader-content-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem; 
+}
+
+.loader-message {
+  font-size: 1.1rem;
+  color: var(--muted);
+  font-weight: 500;
 }
 
 /* Base spinner style */
@@ -464,3 +540,48 @@ nav {
 @media (max-width: 640px) {
   nav.app-nav { flex-direction: column; align-items:flex-start; }
 }
+
+.page-header {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.page-title {
+  font-size: 2.5rem;
+  font-weight: 800;
+  color: var(--brand);
+  letter-spacing: -0.025em;
+}
+
+.page-subtitle {
+  font-size: 1.125rem;
+  color: var(--accent);
+  margin-top: 0.5rem;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.section-title {
+  text-align: center;
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--brand);
+  margin-bottom: 2rem;
+}
+
+/* Loader and Error States */
+.loader-container, .error-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 4rem 1rem;
+  font-size: 1.2rem;
+  color: var(--muted);
+}
+
+.error-container {
+  color: #ef4444; /* A distinct error color */
+  font-weight: 500;
+}
+

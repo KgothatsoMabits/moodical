@@ -1,14 +1,3 @@
-/**
- * Usage:
- * 1) export SPOTIFY_CLIENT_ID="xxx"
- * 2) export SPOTIFY_CLIENT_SECRET="yyy"
- * 3) node scripts/getSpotifyToken.js
- *
- * It prints a Bearer token (valid for a short time).
- *
- * NOTE: Keep client secret safe — don't commit it.
- */
-
 const axios = require('axios');
 
 async function getToken() {
