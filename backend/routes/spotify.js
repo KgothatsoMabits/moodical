@@ -1,28 +1,23 @@
 const express = require('express');
-const fetch = require('node-fetch');
-require('dotenv').config();
-
 const router = express.Router();
+const axios = require('axios'); // Import axios
 
 // Route: Get Access Token
 router.get('/token', async (req, res) => {
-  const auth = Buffer.from(`${process.env.SPOTIFY_CLIENT_ID}:${process.env.SPOTIFY_CLIENT_SECRET}`).toString('base64');
+  const clientId = process.env.SPOTIFY_CLIENT_ID;
+  const clientSecret = process.env.SPOTIFY_CLIENT_SECRET;
 
   try {
-    const response = await fetch('https://accounts.spotify.com/api/token', {
-      method: 'POST',
+    const response = await axios.post('https://accounts.spotify.com/api/token', 'grant_type=client_credentials', {
       headers: {
-        Authorization: `Basic ${auth}`,
-        'Content-Type': 'application/x-www-form-urlencoded'
-      },
-      body: 'grant_type=client_credentials'
+        'Content-Type': 'application/x-www-form-urlencoded',
+        'Authorization': 'Basic ' + (Buffer.from(clientId + ':' + clientSecret).toString('base64'))
+      }
     });
-
-    const data = await response.json();
-    res.json(data); // Send access token back to frontend
+    res.json(response.data);
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: 'Failed to get Spotify token' });
+    console.error('Error fetching Spotify token:', error.response ? error.response.data : error.message);
+    res.status(500).json({ message: 'Error fetching token from Spotify' });
   }
 });
 

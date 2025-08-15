@@ -2,25 +2,42 @@ import React, { useState } from "react";
 import PlaylistCard from "../components/PlaylistCard";
 import Loader from "../components/Loader";
 import MoodCard from "../components/MoodCard";
-import { motion } from "framer-motion";
-import { fetchPlaylistsByCategory } from "../services/api"; // ✅ updated import
-import moods from "../data/moods"; // This should now contain real Spotify categories
+import { fetchPlaylistsByCategory, fetchCategories } from "../services/api"; 
+import moods from "../data/moods"; 
 import "../styles/global.css";
 
 export default function Home() {
-  const [selected, setSelected] = useState(null); // will store mood object
+  const [selected, setSelected] = useState(null); 
   const [playlists, setPlaylists] = useState([]);
   const [loading, setLoading] = useState(false);
+    
+      const handleSelect = async (mood) => {
+        // The mood object uses 'label', not 'name'. Let's check for that instead.
+        if (!mood || !mood.label) {
+          console.error("handleSelect called with invalid mood:", mood);
+          return;
+        }
 
-  const handleSelect = async (moodId) => {
-    setSelected(moodId);
-    document.body.className = moodId; // optional: can style based on mood
+        setSelected(mood.id);
+        document.body.className = mood.id;
+    
+        setLoading(true);
+        try {
+          const availableCategories = await fetchCategories();
+      
+          // Find a category where Spotify's 'name' matches our mood's 'label'
+          const spotifyCategory = availableCategories.find(
+            c => c && c.name && c.name.toLowerCase() === mood.label.toLowerCase()
+          );
 
-    setLoading(true);
-    try {
-      // ✅ Fetch playlists using the updated API function
-      const results = await fetchPlaylistsByCategory(moodId);
-      setPlaylists(results || []);
+          if (spotifyCategory) {
+            const results = await fetchPlaylistsByCategory(spotifyCategory.id);
+        setPlaylists(results || []);
+      } else {
+        // This log will now be more accurate
+        console.warn(`Spotify category named '${mood.name}' not found. Trying a fallback.`);
+        setPlaylists([]);
+      }
     } catch (err) {
       console.error("❌ Failed to fetch playlists:", err);
       setPlaylists([]);
@@ -45,7 +62,7 @@ export default function Home() {
             <MoodCard
               key={mood.id}
               mood={mood}
-              onSelect={() => handleSelect(mood.id)} // pass Spotify category ID
+              onSelect={() => handleSelect(mood)} // pass Spotify category ID
               selected={selected}
             />
           ))}

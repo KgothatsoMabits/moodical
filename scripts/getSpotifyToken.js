@@ -12,8 +12,8 @@
 const axios = require('axios');
 
 async function getToken() {
-  const clientId = process.env.SPOTIFY_CLIENT_ID;
-  const clientSecret = process.env.SPOTIFY_CLIENT_SECRET;
+  const clientId = process.env.VITE.SPOTIFY_CLIENT_ID;
+  const clientSecret = process.env.VITE.SPOTIFY_CLIENT_SECRET;
 
   if (!clientId || !clientSecret) {
     console.error('Set SPOTIFY_CLIENT_ID and SPOTIFY_CLIENT_SECRET in your shell.');

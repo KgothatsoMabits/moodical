@@ -2,35 +2,35 @@ const moods = [
   {
     id: "happy",
     label: "Happy",
-    desc: "Bright & upbeat",
+    desc: 'Upbeat and joyful tunes.',
     image: "/src/assets/moods/happy.jpg",
-    categoryId: "party"
+    category_id: "party"
   },
   {
     id: "sad",
     label: "Sad",
-    desc: "Melancholic",
+    desc: 'Melancholic and reflective music.',
     image: "/src/assets/moods/sad.jpg",
     categoryId: "mood"
   },
   {
     id: "energetic",
-    label: "Energetic",
-    desc: "High-energy",
+    label: "Workout",
+    desc: 'High-energy tracks to get you moving.',
     image: "/src/assets/moods/energetic.jpg",
     categoryId: "workout"
   },
   {
-    id: "calm",
-    label: "Calm",
-    desc: "Soft & chill",
+    id: "chill",
+    label: "Chill",
+    desc: 'Relax and unwind.',
     image: "/src/assets/moods/calm.jpg",
     categoryId: "chill"
   },
   {
-    id: "motivational",
-    label: "Motivational",
-    desc: "Inspiring & uplifting",
+    id: "focus",
+    label: "Focus",
+    desc: 'Music to help you concentrate.',
     image: "/src/assets/moods/motivational.jpg",
     categoryId: "focus"
   },

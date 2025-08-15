@@ -6,7 +6,7 @@ import '../styles/global.css';
 export default function MoodCard({ mood, onSelect, selected }) {
   return (
     <motion.button
-      onClick={() => onSelect(mood.id)}
+      onClick={() => onSelect(mood)} // Pass the whole mood object
       whileHover={{ scale: 1.05 }}
       whileTap={{ scale: 0.95 }}
       className={`mood-card ${selected === mood.id ? 'selected' : ''}`}

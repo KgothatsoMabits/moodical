@@ -1,58 +1,92 @@
-// src/services/api.js
-const SPOTIFY_BASE_URL = "https://api.spotify.com/v1";
-const token = import.meta.env.VITE_SPOTIFY_ACCESS_TOKEN; 
-// Make sure you have this set in your .env file
+import axios from 'axios';
 
-/**
- * Fetch playlists from a Spotify category
- * @param {string} categoryId - The Spotify category ID (e.g., "mood", "party")
- * @returns {Promise<Array>} - Array of playlist objects
- */
-export async function fetchPlaylistsByCategory(categoryId) {
+const moodToCategory = {
+  Happy: "pop",
+  Sad: "sleep",
+  Energetic: "workout",
+  Calm: "chill",
+  Motivational: "focus",
+  Bright: "party",
+  Melancholic: "romance"
+};
+
+// Function to get the Spotify token from our backend
+const getSpotifyToken = async () => {
   try {
-    const response = await fetch(
-      `${SPOTIFY_BASE_URL}/browse/categories/${categoryId}/playlists?limit=10`,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
+    const response = await axios.get('/api/spotify/token');
+    return response.data.access_token;
+  } catch (error) {
+    console.error('Error fetching Spotify token:', error);
+    return null;
+  }
+};
+
+export const fetchPlaylistsByCategory = async (categoryId) => {
+  const token = await getSpotifyToken();
+  if (!token) {
+    console.error('Could not retrieve Spotify token.');
+    return;
+  }
+
+  try {
+    // Add country parameter to the request for better results
+    const response = await axios.get(`https://api.spotify.com/v1/browse/categories/${categoryId}/playlists?country=US`, {
+      headers: {
+        'Authorization': `Bearer ${token}`
       }
-    );
+    });
+    return response.data.playlists.items;
+  } catch (error) {
+    console.error('Error fetching playlists:', error);
+  }
+};
+
+// New function to get all available categories from Spotify
+export const fetchCategories = async () => {
+  const token = await getSpotifyToken();
+  if (!token) {
+    console.error('Could not retrieve Spotify token.');
+    return [];
+  }
+
+  try {
+    const response = await axios.get('https://api.spotify.com/v1/browse/categories?country=US&limit=50', {
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    });
+    return response.data.categories.items;
+  } catch (error) {
+    console.error('Error fetching categories:', error);
+    return [];
+  }
+};
+
+export async function fetchPlaylistsByMood(mood, accessToken) {
+  const categoryId = moodToCategory[mood];
+  if (!categoryId) {
+    console.error("No category ID found for mood:", mood);
+    return [];
+  }
+
+  const url = `https://api.spotify.com/v1/browse/categories/${categoryId}/playlists?country=US`;
+
+  try {
+    const response = await fetch(url, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`
+      }
+    });
 
     if (!response.ok) {
-      console.error("Error fetching playlists:", response.status, response.statusText);
+      console.error("Spotify API error:", response.statusText);
       return [];
     }
 
     const data = await response.json();
     return data.playlists.items || [];
-  } catch (err) {
-    console.error("Error in fetchPlaylistsByCategory:", err);
-    return [];
-  }
-}
-
-/**
- * Optionally fetch available Spotify categories
- * @returns {Promise<Array>} - Array of category objects
- */
-export async function fetchCategories() {
-  try {
-    const response = await fetch(`${SPOTIFY_BASE_URL}/browse/categories?limit=20`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-
-    if (!response.ok) {
-      console.error("Error fetching categories:", response.status, response.statusText);
-      return [];
-    }
-
-    const data = await response.json();
-    return data.categories.items || [];
-  } catch (err) {
-    console.error("Error in fetchCategories:", err);
+  } catch (error) {
+    console.error("Error fetching playlists:", error);
     return [];
   }
 }
