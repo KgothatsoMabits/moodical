@@ -2,7 +2,7 @@ import axios from 'axios';
 
 export const getSpotifyToken = async () => {
   try {
-    const response = await axios.get('/api/token');
+    const response = await axios.get('/api/spotify/token');
     return response.data.access_token;
   } catch (error) {
     console.error('Error fetching Spotify token:', error);
@@ -26,31 +26,24 @@ export const fetchAvailableCategories = async () => {
   }
 };
 
-export async function fetchPlaylistsByCategory(categoryId, opts = {}) {
-  const params = new URLSearchParams({
-    categoryId,
-    country: opts.country || "US",
-    limit: String(opts.limit || 12),
-  });
+export const fetchPlaylistsByCategory = async (categoryId) => {
+  const token = await getSpotifyToken();
+  if (!token) return [];
 
-  const resp = await fetch(`/api/spotify/category-playlists?${params.toString()}`);
-  if (!resp.ok) {
-    const text = await resp.text();
-    throw new Error(`Playlists API failed: ${resp.status} ${text}`);
+  try {
+    const response = await axios.get(
+      `https://api.spotify.com/v1/browse/categories/${categoryId}/playlists`,
+      {
+        headers: { Authorization: `Bearer ${token}` },
+        params: { country: 'US', limit: 5 },
+      }
+    );
+    return response.data.playlists.items;
+  } catch (error) {
+    console.error(`Error fetching playlists for category ${categoryId}:`, error.message);
+    return []; 
   }
-  const data = await resp.json();
-  return data.playlists || [];
-}
-
-export async function fetchCategories({ country = "US", limit = 50 } = {}) {
-  const params = new URLSearchParams({ country, limit: String(limit) });
-  const resp = await fetch(`/api/spotify/categories?${params.toString()}`);
-  if (!resp.ok) {
-    const text = await resp.text();
-    throw new Error(`Categories API failed: ${resp.status} ${text}`);
-  }
-  return resp.json(); 
-}
+};
 
 export const searchForPlaylists = async (query) => {
   const token = await getSpotifyToken();
